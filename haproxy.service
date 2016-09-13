@@ -1,0 +1,17 @@
+[Unit]
+Description=The HAProxy Service container
+After=docker.service
+Requires=docker.service
+PartOf=docker.service
+
+[Service]
+#EnvironmentFile=
+ExecStartPre=-/usr/bin/docker rm -f haproxy
+ExecStart=/usr/bin/docker run --name haproxy --rm -v /opt/haproxy/etc/haproxy:/etc/haproxy:z --net=host rhel72/haproxy
+ExecStop=/usr/bin/docker stop haproxy
+SyslogIdentifier=haproxy
+Restart=always
+RestartSec=5s
+
+[Install]
+WantedBy=docker.service
